@@ -14,20 +14,19 @@ use Twig\Environment;
 
 class ConferenceController
 {
+    // If this class were to extend the AbstractController, you could avoid this constructor.
     public function __construct(
         private Environment $twig,
-        private ConferenceRepository $conferenceRepository
     ) {
     }
 
     #[Route('/', name: 'homepage')]
-    public function index(): Response
-    {
-        $conferences = $this->conferenceRepository->findAll();
-
+    public function index(
+        ConferenceRepository $conferenceRepository
+    ): Response {
         return new Response($this->twig->render(
             'conference/index.html.twig', [
-                'conferences' => $conferences,
+                'conferences' => $conferenceRepository->findAll(),
             ]
         ));
     }
