@@ -8,6 +8,7 @@ use App\Repository\CommentRepository;
 use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
 use Stringable;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=CommentRepository::class)
@@ -25,16 +26,20 @@ class Comment implements Stringable
     /**
      * @ORM\Column(type="string", length=255)
      */
+    #[Assert\NotBlank]
     private $author;
 
     /**
      * @ORM\Column(type="text")
      */
+    #[Assert\NotBlank]
     private $text;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
+    #[Assert\NotBlank]
+    #[Assert\Email]
     private $email;
 
     /**
