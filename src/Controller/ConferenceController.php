@@ -14,7 +14,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Twig\Environment;
 
 #[AsController]
-class ConferenceController
+final class ConferenceController extends BaseController
 {
     // If this class were to extend the AbstractController, you could avoid this constructor.
     public function __construct(
