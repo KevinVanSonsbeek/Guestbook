@@ -8,12 +8,14 @@ use App\Repository\ConferenceRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Ramsey\Uuid\UuidInterface;
 use Stringable;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\String\Slugger\SluggerInterface;
 
 /**
  * @ORM\Entity(repositoryClass=ConferenceRepository::class)
- * @UniqueEntity()
+ * @UniqueEntity("slug")
  */
 class Conference implements Stringable
 {
@@ -140,5 +142,12 @@ class Conference implements Stringable
         $this->slug = $slug;
 
         return $this;
+    }
+
+    public function computeSlug(SluggerInterface $slugger, UuidInterface $uuid)
+    {
+        if (!$this->slug || '-' === $this->slug) {
+            $this->slug = (string) $slugger->slug((string) $this . '-' . $uuid->toString())->lower();
+        }
     }
 }
