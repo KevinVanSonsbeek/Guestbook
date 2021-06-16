@@ -46,6 +46,7 @@ class CommentCrudController extends AbstractCrudController
             ->hideOnIndex();
         yield ImageField::new('photoFilename')
             ->setBasePath('/uploads/images')
-            ->setLabel('Photo');
+            ->setLabel('Photo')
+            ->onlyOnIndex();
     }
 }
