@@ -9,9 +9,11 @@ use App\Repository\CommentRepository;
 use App\Repository\ConferenceRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Routing\Annotation\Route;
 use Twig\Environment;
 
+#[AsController]
 class ConferenceController
 {
     // If this class were to extend the AbstractController, you could avoid this constructor.
