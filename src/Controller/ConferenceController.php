@@ -11,7 +11,6 @@ use App\Repository\CommentRepository;
 use App\Repository\ConferenceRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
@@ -24,6 +23,7 @@ final class ConferenceController extends AbstractController
     // If this class were to extend the AbstractController, you could avoid this constructor.
     public function __construct(
         private Environment $twig,
+        private string $photoDir
     ) {
     }
 
@@ -41,13 +41,12 @@ final class ConferenceController extends AbstractController
     #[Route('/conference/{slug}', name: 'conference')]
     public function show(
         Request $request,
-        FormFactoryInterface $formFactory,
         EntityManagerInterface $entityManager,
-        Conference $conference,
         CommentRepository $commentRepository,
+        Conference $conference,
     ): Response {
         $comment = new Comment();
-        $form = $formFactory->create(CommentFormType::class, $comment);
+        $form = $this->createForm(CommentFormType::class, $comment);
 
         $form->handleRequest($request);
 
@@ -57,7 +56,7 @@ final class ConferenceController extends AbstractController
 
             if ($photo) {
                 $filename = bin2hex(random_bytes(6)) . '.' . $photo->guessExtension();
-                $photo->move($photoDir, $filename);
+                $photo->move($this->photoDir, $filename);
                 $comment->setPhotoFilename($filename);
             }
 
