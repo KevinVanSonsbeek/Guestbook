@@ -11,6 +11,7 @@ use Stringable;
 
 /**
  * @ORM\Entity(repositoryClass=CommentRepository::class)
+ * @ORM\HasLifecycleCallbacks()
  */
 class Comment implements Stringable
 {
@@ -98,11 +99,12 @@ class Comment implements Stringable
         return $this->createdAt;
     }
 
-    public function setCreatedAt(DateTimeImmutable $createdAt): self
+    /**
+     * @ORM\PrePersist()
+     */
+    public function setCreatedAt()
     {
-        $this->createdAt = $createdAt;
-
-        return $this;
+        $this->createdAt = new DateTimeImmutable();
     }
 
     public function getConference(): ?Conference
